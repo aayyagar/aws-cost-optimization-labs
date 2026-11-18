@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install pytest pyyaml
+      - run: python -m pytest -q tests
+      - name: Demo report
+        run: python -m costlab report --demo --html out/report.html --json out/report.json
+
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        lab: [01-ec2-rightsizing, 02-spot-and-scheduling, 03-tagging-showback, 04-eks-karpenter]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: terraform validate
+        working-directory: labs/${{ matrix.lab }}
+        run: |
+          terraform init -backend=false -input=false
+          terraform validate

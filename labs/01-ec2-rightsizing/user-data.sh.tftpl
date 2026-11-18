@@ -1,0 +1,33 @@
+#!/bin/bash
+# Lab 1 bootstrap: CloudWatch agent for memory metrics, plus a steady synthetic CPU load.
+set -euo pipefail
+dnf install -y amazon-cloudwatch-agent stress-ng
+
+cat > /opt/aws/amazon-cloudwatch-agent/etc/config.json <<'JSON'
+{
+  "agent": { "metrics_collection_interval": 60, "omit_hostname": true },
+  "metrics": {
+    "append_dimensions": { "InstanceId": "$${aws:InstanceId}" },
+    "metrics_collected": { "mem": { "measurement": ["mem_used_percent"] } }
+  }
+}
+JSON
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s \
+  -c file:/opt/aws/amazon-cloudwatch-agent/etc/config.json
+
+if [ "${cpu_load}" -gt 0 ]; then
+  cat > /etc/systemd/system/costlab-load.service <<UNIT
+[Unit]
+Description=Cost lab synthetic CPU load (${cpu_load}%)
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/stress-ng --cpu 0 --cpu-load ${cpu_load} --timeout 0
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+  systemctl daemon-reload
+  systemctl enable --now costlab-load.service
+fi

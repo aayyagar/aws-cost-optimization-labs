@@ -1,0 +1,29 @@
+# A do-nothing workload to drive scaling: each replica asks for 1 vCPU and 1.5 GiB.
+# Scale it up and down and watch Karpenter add, consolidate and remove nodes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inflate
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: inflate
+  template:
+    metadata:
+      labels:
+        app: inflate
+    spec:
+      terminationGracePeriodSeconds: 0
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: inflate
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          resources:
+            requests:
+              cpu: "1"
+              memory: 1.5Gi
+          securityContext:
+            allowPrivilegeEscalation: false

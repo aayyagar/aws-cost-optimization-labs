@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.build/
+out/
+*.html
+!sample-report/index.html
+*.json
+!**/package.json
