@@ -138,6 +138,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\n== {c}")
         _print(c, data)
     if args.json_out:
+        Path(args.json_out).parent.mkdir(parents=True, exist_ok=True)
         Path(args.json_out).write_text(json.dumps(result, indent=2), encoding="utf-8")
         print(f"\n  JSON: {args.json_out}")
     if args.html:

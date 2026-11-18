@@ -109,7 +109,7 @@ def test_report_escapes_values():
 
 
 def test_demo_report_end_to_end(tmp_path):
-    out, js = tmp_path / "r.html", tmp_path / "r.json"
+    out, js = tmp_path / "new" / "r.html", tmp_path / "other" / "r.json"   # folders that do not exist yet
     subprocess.run([sys.executable, "-m", "costlab", "report", "--demo", "--html", str(out), "--json", str(js)], cwd=ROOT, check=True, capture_output=True)
     data = json.loads(js.read_text())
     assert {"rightsizing", "schedule", "spot", "showback", "eks"} <= set(data)
