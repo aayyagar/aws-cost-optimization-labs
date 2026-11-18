@@ -17,4 +17,4 @@
   - `report`, which writes one HTML report.
   - A `--demo` account, plus `--live-pricing` through the AWS Pricing API.
 - Tests: pytest suite including the scheduler Lambda and the Karpenter manifests.
-- CI: tests run on Python 3.9 and 3.12, and `terraform validate` runs on every lab.
+- CI: tests run on Python 3.11 and 3.13, and `terraform validate` runs on every lab.

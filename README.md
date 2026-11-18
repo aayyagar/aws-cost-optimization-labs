@@ -7,7 +7,7 @@ Four hands-on labs for the AWS savings that matter most, each with Terraform to 
 3. **Tagging and showback:** make every dollar traceable to a team and catch untagged spend.
 4. **EKS autoscaling with Karpenter:** right-sized, consolidated, Spot-first Kubernetes nodes.
 
-**[View the sample report →](https://aayyagar.github.io/aws-cost-optimization-labs/sample-report/)** · Python 3.9+ · Terraform 1.5+ · MIT license
+**[View the sample report →](https://aayyagar.github.io/aws-cost-optimization-labs/sample-report/)** · Python 3.10+ · Terraform 1.5+ · MIT license
 
 ```text
 $ python -m costlab report --demo --html report.html
